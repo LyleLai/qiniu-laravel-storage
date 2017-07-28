@@ -8,7 +8,6 @@ use zgldh\QiniuStorage\Plugins\ImageExif;
 use zgldh\QiniuStorage\Plugins\ImageInfo;
 use zgldh\QiniuStorage\Plugins\AvInfo;
 use zgldh\QiniuStorage\Plugins\ImagePreviewUrl;
-use zgldh\QiniuStorage\Plugins\LastReturn;
 use zgldh\QiniuStorage\Plugins\PersistentFop;
 use zgldh\QiniuStorage\Plugins\PersistentStatus;
 use zgldh\QiniuStorage\Plugins\PrivateDownloadUrl;
@@ -16,7 +15,6 @@ use zgldh\QiniuStorage\Plugins\Qetag;
 use zgldh\QiniuStorage\Plugins\UploadToken;
 use zgldh\QiniuStorage\Plugins\PrivateImagePreviewUrl;
 use zgldh\QiniuStorage\Plugins\VerifyCallback;
-use zgldh\QiniuStorage\Plugins\WithUploadToken;
 
 class QiniuFilesystemServiceProvider extends ServiceProvider
 {
@@ -40,8 +38,8 @@ class QiniuFilesystemServiceProvider extends ServiceProvider
                     $config['secret_key'],
                     $config['bucket'],
                     $domains,
-                    isset($config['notify_url']) ? $config['notify_url'] : null,
-                    isset($config['access']) ? $config['access'] : 'public'
+                    $config['notify_url'] ? $config['notify_url'] : null,
+                    $config['access'] ? $config['access'] : 'public'
                 );
                 $file_system = new Filesystem($qiniu_adapter);
                 $file_system->addPlugin(new PrivateDownloadUrl());
@@ -57,8 +55,6 @@ class QiniuFilesystemServiceProvider extends ServiceProvider
                 $file_system->addPlugin(new VerifyCallback());
                 $file_system->addPlugin(new Fetch());
                 $file_system->addPlugin(new Qetag());
-                $file_system->addPlugin(new WithUploadToken());
-                $file_system->addPlugin(new LastReturn());
 
                 return $file_system;
             }

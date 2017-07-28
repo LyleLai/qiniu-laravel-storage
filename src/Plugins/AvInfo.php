@@ -11,7 +11,7 @@ namespace zgldh\QiniuStorage\Plugins;
 use League\Flysystem\Plugin\AbstractPlugin;
 
 /**
- * Class AvInfo
+ * Class PrivateDownloadUrl
  * 查看多媒体文件属性 <br>
  * $disk        = \Storage::disk('qiniu'); <br>
  * $re          = $disk->getDriver()->avInfo('filename.mp3'); <br>

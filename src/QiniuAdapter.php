@@ -34,9 +34,7 @@ class QiniuAdapter extends AbstractAdapter
 
     private $prefixedDomains = [];
 
-    private $lastReturn = null;
-
-    private $uploadToken = null;
+    private $lastQetag = null;
 
     public function __construct($access_key, $secret_key, $bucket, $domains, $notify_url = null, $access = 'public')
     {
@@ -69,11 +67,6 @@ class QiniuAdapter extends AbstractAdapter
 
         $prefixedDomain = $is_empty ? null : $prefix;
         $this->prefixedDomains[$domainType] = $prefixedDomain;
-    }
-
-    public function withUploadToken($token)
-    {
-        $this->uploadToken = $token;
     }
 
     private function getAuth()
@@ -146,9 +139,7 @@ class QiniuAdapter extends AbstractAdapter
     public function write($path, $contents, Config $config)
     {
         $auth = $this->getAuth();
-
-        $token = $this->uploadToken ?: $auth->uploadToken($this->bucket, $path);
-        $this->withUploadToken(null);
+        $token = $auth->uploadToken($this->bucket, $path);
 
         $params = $config->get('params', null);
         $mime = $config->get('mime', 'application/octet-stream');
@@ -162,7 +153,7 @@ class QiniuAdapter extends AbstractAdapter
 
             return false;
         } else {
-            $this->lastReturn = $ret;
+            $this->lastQetag = $ret['hash'];
             return $ret;
         }
     }
@@ -194,9 +185,7 @@ class QiniuAdapter extends AbstractAdapter
     public function writeStream($path, $resource, Config $config)
     {
         $auth = $this->getAuth();
-
-        $token = $this->uploadToken ?: $auth->uploadToken($this->bucket, $path);
-        $this->withUploadToken(null);
+        $token = $auth->uploadToken($this->bucket, $path);
 
         $params = $config->get('params', null);
         $mime = $config->get('mime', 'application/octet-stream');
@@ -209,7 +198,7 @@ class QiniuAdapter extends AbstractAdapter
 
             return false;
         } else {
-            $this->lastReturn = $ret;
+            $this->lastQetag = $ret['hash'];
             return $ret;
         }
     }
@@ -542,17 +531,6 @@ class QiniuAdapter extends AbstractAdapter
 
         return $location;
     }
-    
-    /**
-     * @DriverFunction
-     * @param null $path
-     * @param string $domainType
-     * @return string
-     */
-    public function getUrl($path = null, $domainType = 'default')
-    {
-        return $this->downloadUrl($path, $domainType)->getUrl();
-    }
 
     /**
      * @DriverFunction
@@ -765,18 +743,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getLastQetag()
     {
-        if ($this->lastReturn && isset($this->lastReturn['hash'])) {
-            return $this->lastReturn['hash'];
-        }
-        return null;
-    }
-
-    /**
-     * @DriverFunction
-     * @return null
-     */
-    public function getLastReturn()
-    {
-        return $this->lastReturn;
+        return $this->lastQetag;
     }
 }

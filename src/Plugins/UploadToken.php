@@ -11,8 +11,8 @@ namespace zgldh\QiniuStorage\Plugins;
 use League\Flysystem\Plugin\AbstractPlugin;
 
 /**
- * Class UploadToken
- * 获取上传Token <br>
+ * Class PrivateDownloadUrl
+ * 得到公有资源下载地址 <br>
  * $disk        = \Storage::disk('qiniu'); <br>
  * $re          = $disk->getDriver()->uploadToken('foo/bar1.css'); <br>
  * @package zgldh\QiniuStorage\Plugins

@@ -6,10 +6,6 @@
 
 ## 更新
 
- master-dev
- 1. 增加了 ```withUploadToken```, ```lastReturn``` 等命令。
- 2. 修正了代码内的一些typo
-
  v0.6 增加了```fetch```, ```qetag``` 命令。
 
  v0.5 增加了```QiniuUrl```来更方便的设置文件 URL 参数。
@@ -57,7 +53,7 @@
     $disk->exists('file.jpg');                      //文件是否存在
     $disk->get('file.jpg');                         //获取文件内容
     $disk->put('file.jpg',$contents);               //上传文件
-    $disk->put('file.jpg',fopen('path/to/big.jpg','r+')); //分段上传文件。建议大文件>10Mb使用。    
+    $disk->put('file.jpg',fopen('path/to/big.jpg','r+')); //分段上传文件。建议大文件>10Mb使用。
     $disk->prepend('file.log', 'Prepended Text');   //附加内容到文件开头
     $disk->append('file.log', 'Appended Text');     //附加内容到文件结尾
     $disk->delete('file.jpg');                      //删除文件
@@ -73,13 +69,8 @@
     $disk->makeDirectory($directory);               //这个其实没有任何作用
     $disk->deleteDirectory($directory);             //删除目录，包括目录下所有子文件子目录
 
-    $disk->getDriver()->uploadToken();              //获取上传Token
-    $disk->getDriver()->uploadToken('file.jpg');    //获取上传Token
-
-    $disk->getDriver()->withUploadToken($token);    // 使用自定义的 uploadToken 进行上传，
-    $disk->put('file.jpg',$content);                // 则本次的 put 操作，将使用上述的 $token 进行上传。
-                                                    // 常用于自动触发持久化处理 https://github.com/qiniu/php-sdk/blob/master/examples/upload_and_pfop.php
-    
+    $disk->getDriver()->uploadToken();                          //获取上传Token
+    $disk->getDriver()->uploadToken('file.jpg');                //获取上传Token
     $disk->getDriver()->downloadUrl('file.jpg');                //获取下载地址
     $disk->getDriver()->downloadUrl('file.jpg')
                       ->setDownload('foo.jpg');                 //获取下载地址，文件名为 foo.jpg
@@ -101,8 +92,7 @@
     $disk->getDriver()->persistentFop('file.flv','fop','队列名');   //使用私有队列执行持久化数据处理
     $disk->getDriver()->persistentStatus($persistent_fop_id);       //查看持久化数据处理的状态。
     $disk->getDriver()->fetch('http://abc.com/foo.jpg', 'bar.jpg'); //调用fetch将 foo.jpg 数据以 bar.jpg 的名字储存起来。
-    $disk->getDriver()->qetag();        //得到最后一次执行 put, copy, append 等写入操作后，得到的hash值。详见 https://github.com/qiniu/qetag
-    $disk->getDriver()->lastReturn();   //得到最后一次执行 put, copy, append 等写入操作后，得到的返回值。
+    $disk->getDriver()->qetag();    //得到最后一次执行 put, copy, append 等写入操作后，得到的hash值。详见 https://github.com/qiniu/qetag
 
 ```
 
@@ -132,13 +122,8 @@
     $disk->makeDirectory($directory);               //这个其实没有任何作用
     $disk->deleteDirectory($directory);             //删除目录，包括目录下所有子文件子目录
 
-    $disk->uploadToken();                           //获取上传Token
-    $disk->uploadToken('file.jpg');                 //获取上传Token
-    
-    $disk->withUploadToken($token);                 // 使用自定义的 uploadToken 进行上传，
-    $disk->put('file.jpg',$content);                // 则本次的 put 操作，将使用上述的 $token 进行上传。
-                                                    // 常用于自动触发持久化处理 https://github.com/qiniu/php-sdk/blob/master/examples/upload_and_pfop.php
-    
+    $disk->uploadToken();                               //获取上传Token
+    $disk->uploadToken('file.jpg');                     //获取上传Token
     $disk->downloadUrl('file.jpg');                     //获取下载地址
     $disk->downloadUrl('file.jpg')
          ->setDownload('foo.jpg');                      //获取下载地址，文件名为 foo.jpg
@@ -161,8 +146,7 @@
     $disk->persistentStatus($persistent_fop_id);        //查看持久化数据处理的状态。
 
     $disk->fetch('http://abc.com/foo.jpg', 'bar.jpg'); //调用fetch将 foo.jpg 数据以 bar.jpg 的名字储存起来。
-    $disk->qetag();     //得到最后一次执行 put, copy, append 等写入操作后，得到的hash值。详见 https://github.com/qiniu/qetag
-    $disk->lastReturn();//得到最后一次执行 put, copy, append 等写入操作后，得到的返回值。
+    $disk->qetag();    //得到最后一次执行 put, copy, append 等写入操作后，得到的hash值。详见 https://github.com/qiniu/qetag
 
 ```
 
