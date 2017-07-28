@@ -1,5 +1,5 @@
 {
-  "name": "lyle-lai/qiniu-laravel",
+  "name": "lyle-lai/qiniu-laravel-storage",
   "type": "library",
   "description": "Qiniu Resource (Cloud) Storage SDK for Laravel 5",
   "keywords": [
